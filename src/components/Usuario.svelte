@@ -4,6 +4,7 @@
 
     export let usuario: IUsuario;
 
+
 </script>
 
 <div class="card-usuario">

@@ -3,34 +3,20 @@
     import type IUsuario from "./interfaces/IUsuario";
     import Usuario from "./components/Usuario.svelte";
     import Formulario from "./components/Formulario.svelte";
+    import Cabecalho from "./components/Cabecalho.svelte";
 
     // se "strictNullChecks": true temos que dizer pro compilador TS que usuarioApp pode ser nulo ou IUsuario
     let usuarioApp: IUsuario | null = null;
 
-    function definirUsuario(evento: CustomEvent<IUsuario>){
+    function definirUsuario(evento: CustomEvent<IUsuario | null>){
         // Variável pai recebe os eventos que a variável filho ta enviando (Via dispatch)
         usuarioApp = evento.detail;
     }
 </script>
 
 <div>
-    <header>
-        <Titulo />
 
-        <div class="busca-usuario">
-            <!--
-                USANDO BIND:
-                Aqui precisamos fazer bind pois queremos que a prop Filho (Formulario) passe pro Pai (App)
-                Se as variáveis dos componentes possuisseem mesmo nome (usuario) basta deixar assim
-                <Formulario bind:usuario />
-                <Formulario bind:usuarioForm={usuarioApp} />
-            -->
-            <!-- 
-                USANDO DISPATCH
-            -->
-        <Formulario on:aoAlterarUsuario={definirUsuario}/>
-        </div>
-    </header>
+    <Cabecalho on:aoAlterarUsuario={definirUsuario} />
 
     {#if usuarioApp}
         <!--
@@ -38,7 +24,7 @@
             <Usuario {usuario} />
             Aqui está sendo passado uma prop de Pai (App) para Filho (Usuario)
         -->
-        <Usuario usuario={usuarioApp} />
+        <Usuario usuario={usuarioApp}/>
     {/if}
 </div>
 
@@ -46,15 +32,4 @@
     /* .app {
         max-height: 100vh;
     } */
-
-    header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .busca-usuario {
-        position: relative;
-        width: 70%;
-    }
 </style>
